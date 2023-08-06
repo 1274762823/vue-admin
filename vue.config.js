@@ -11,6 +11,10 @@ module.exports = defineConfig({
 			'/api':{
 				target:'http://sph-h5-api.atguigu.cn',
 				changeOrigin:true
+			},
+			'/gateway':{
+				target:'https://m.maizuo.com',
+				changeOrigin:true
 			}
 		}
 	},
