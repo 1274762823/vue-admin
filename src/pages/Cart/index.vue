@@ -3,6 +3,8 @@ import {defineComponent} from 'vue'
 import {mapGetters} from "vuex";
 import {mapActions} from "vuex";
 import {checkAll} from "@/api/cart";
+import {debounce} from "lodash";
+import {goodsNumReg} from "@/utils/reg";
 
 export default defineComponent({
   name: "Cart",
@@ -18,6 +20,27 @@ export default defineComponent({
     this.addCart();
   },
   methods:{
+    //修改数量
+    changeNum:debounce(function(e,skuId){
+        const res = this.$store.state.cart.cartList.find(v=>v.skuId===skuId).skuNum;
+
+        const num = e.target.value.trim()/1;
+        if(goodsNumReg.test(num)){
+          // this.buyNum = num;
+          this.goCartAccountAsync({
+            skuId,
+            skuNum:num-res
+          })
+        }else{
+          // eslint-disable-next-line no-undef
+          // e.target.value = skuNum
+          e.target.value=res
+        }
+      // console.log(e.target.value)
+
+      },1000)
+    ,
+
     //全选
     chooseAllCheck(e){
       const isChecked = e.target.checked?1:0;
@@ -82,7 +105,7 @@ export default defineComponent({
           </li>
           <li class="cart-list-con5">
             <a  href="javascript:void(0)" class="mins" @click="changeAccountMins(item.skuId,item.skuNum)">-</a>
-            <input  autocomplete="off" type="text" :value="item.skuNum" minnum="1" class="itxt">
+            <input @change="changeNum($event,item.skuId)" autocomplete="off" type="text" :value="item.skuNum" minnum="1" class="itxt">
             <a href="javascript:void(0)" class="plus" @click="changeAccountPlus(item.skuId,item.skuNum)">+</a>
           </li>
           <li class="cart-list-con6">
