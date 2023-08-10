@@ -54,6 +54,7 @@ const product = {
         async getProductInfo({commit},id){
             const {data} = await getProductDetail(id);
             commit('Add_PRODUCT_INFO',data)
+            console.log(data)
         },
 
        async getData({commit},num){

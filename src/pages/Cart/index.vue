@@ -1,15 +1,52 @@
 <script>
 import {defineComponent} from 'vue'
 import {mapGetters} from "vuex";
+import {mapActions} from "vuex";
+import {checkAll} from "@/api/cart";
 
 export default defineComponent({
   name: "Cart",
+  data(){
+    return{
+      num:1
+    }
+  },
   computed:{
     ...mapGetters('cart',['countPrice'])
   },
   mounted() {
-    this.$store.dispatch('cart/addCart')
+    this.addCart();
   },
+  methods:{
+    //全选
+    chooseAllCheck(e){
+      const isChecked = e.target.checked?1:0;
+      this.$store.dispatch('cart/checkAllAsync',isChecked)
+    },
+
+    ...mapActions('cart',['addCart','goCartAccountAsync']),
+    // 数量减
+    changeAccountMins(skuId,skuNum){
+       if(skuNum  <= 1) return
+        this.goCartAccountAsync({
+          skuId,
+          skuNum:-1
+        })
+     // const info =  this.$store.state.cart.cartList.find(v=>v.skuId === skuId)
+     //  console.log(info.skuNum)
+
+
+    },
+    // 数量加
+    changeAccountPlus(skuId,skuNum){
+      if(skuNum  >= 200) return
+      this.goCartAccountAsync({
+        skuId,
+        skuNum:1
+      })
+    },
+
+  }
 })
 </script>
 
@@ -44,9 +81,9 @@ export default defineComponent({
             <span class="price">{{ item.skuPrice }}</span>
           </li>
           <li class="cart-list-con5">
-            <a href="javascript:void(0)" class="mins">-</a>
-            <input autocomplete="off" type="text" value="1" minnum="1" class="itxt">
-            <a href="javascript:void(0)" class="plus">+</a>
+            <a  href="javascript:void(0)" class="mins" @click="changeAccountMins(item.skuId,item.skuNum)">-</a>
+            <input  autocomplete="off" type="text" :value="item.skuNum" minnum="1" class="itxt">
+            <a href="javascript:void(0)" class="plus" @click="changeAccountPlus(item.skuId,item.skuNum)">+</a>
           </li>
           <li class="cart-list-con6">
             <span class="sum">{{ item.skuPrice * item.skuNum }}</span>
@@ -61,7 +98,7 @@ export default defineComponent({
     </div>
     <div class="cart-tool">
       <div class="select-all">
-        <input class="chooseAll" type="checkbox">
+        <input @click="chooseAllCheck" :checked="$store.state.cart.cartList.every(v=>v.isChecked)" class="chooseAll" type="checkbox">
         <span>全选</span>
       </div>
       <div class="option">

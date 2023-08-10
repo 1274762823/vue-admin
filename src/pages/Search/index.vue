@@ -22,6 +22,33 @@ export default defineComponent({
   },
   components: {PageNation, SearchSelector},
   methods:{
+    //加入购物车
+
+    // async goAddCart (id){
+    //   this.$store.dispatch('product/getProductInfo',id)
+    //   sessionStorage.setItem('addCart',JSON.stringify({
+    //     buyNum:1,
+    //     // attrList:[...data.spuSaleAttrList] || [],
+    //     // ...data.skuInfo
+    //   }));
+    //   // console.log(this.$store.state.product.searchList.goodsList.find(v=>v.id===id))
+    //    this.$router.push('/addCartSuccess')
+    // },
+    async goAddCart(id){
+      //将商品详情存储至会话存储空间
+      sessionStorage.setItem('addCartInfo',JSON.stringify({
+        buyNum:1,
+        // attrList:[...this.spuSaleAttrList] || [],
+        ...this.skuInfo
+      }));
+      await this.$store.dispatch('cart/goCartAccountAsync',{
+        skuId:id,
+        skuNum:1
+      })
+      this.$router.push('/addCartSuccess')
+    },
+
+
     //切换排序方式
     changeUpOrDown(type){
       if(this.type === type){
@@ -226,7 +253,7 @@ export default defineComponent({
                   <i class="command">已有<span>{{item.hotScore}}</span>人评价</i>
                 </div>
                 <div class="operate">
-                  <a href="success-cart.html" target="_blank" class="sui-btn btn-bordered btn-danger">加入购物车</a>
+                  <a  @click="goAddCart(item.id)" class="sui-btn btn-bordered btn-danger">加入购物车</a>
                   <a href="javascript:void(0);" class="sui-btn btn-bordered">收藏</a>
                 </div>
               </div>

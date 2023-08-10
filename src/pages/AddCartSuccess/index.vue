@@ -22,7 +22,7 @@ export default defineComponent({
       </h3>
       <div class="goods">
         <div class="left-good">
-          <div class="left-pic"><img width="60" height="60" :src="cartInfo.skuDefaultImg"></div>
+          <div class="left-pic"><img width="60" height="60" :src="cartInfo.skuDefaultImg ? cartInfo.skuDefaultImg : cartInfo.defaultImg"></div>
           <div class="right-info">
             <p class="title">{{cartInfo.skuDesc}}</p>
             <p class="attr" v-for="item in cartInfo.skuSaleAttrValueList" :key="item.id">{{item.saleAttrName}}:{{item.saleAttrValueName }}</p>

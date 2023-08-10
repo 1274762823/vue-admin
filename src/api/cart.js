@@ -14,5 +14,7 @@ export const changeCartChecked = (skuID,isChecked)=>sphRequest.get(`/cart/checkC
 export const defaultOne = (skuId)=>sphRequest.delete(`/cart/deleteCart/${skuId}`)
 
 //批量删除
-// export const deleteChecked = data=>sphRequest.post('/cart/batchDeleteCart',data)
 export const deleteChecked = (data)=>sphRequest.post(`/cart/batchDeleteCart`,data)
+
+//批量选中
+export const checkAll = (isChecked,skuIdList)=>sphRequest.post(`/cart/batchCheckCart/${isChecked}`,skuIdList)

@@ -64,7 +64,7 @@ export default defineComponent({
       //将商品详情存储至会话存储空间
       sessionStorage.setItem('addCartInfo',JSON.stringify({
           buyNum:this.buyNum,
-          attrList:[...this.spuSaleAttrList],
+          attrList:[...this.spuSaleAttrList] ,
           ...this.skuInfo
       }));
       await this.$store.dispatch('cart/goCartAccountAsync',{
