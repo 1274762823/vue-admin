@@ -1,5 +1,5 @@
 export default {
     currency(v,n,type='￥'){
-        return type+v.toFixed(n)
+        return type+v?.toFixed(n)
     }
 }
